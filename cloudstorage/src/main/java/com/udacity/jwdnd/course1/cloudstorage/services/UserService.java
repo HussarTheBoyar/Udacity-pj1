@@ -45,4 +45,8 @@ public class UserService {
 
     }
 
+    public String getUserName(Authentication authentication){
+        return authentication.getName();
+    }
+
 }

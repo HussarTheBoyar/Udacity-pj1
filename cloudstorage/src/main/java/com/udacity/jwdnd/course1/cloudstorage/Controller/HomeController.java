@@ -20,14 +20,14 @@ public class HomeController {
 
     UserService userService;
     FileService fileService;
-    NoteService noteService;
+    //NoteService noteService;
     CredentialService credentialService;
     EncryptionService encryptionService;
 
-    public HomeController(UserService userService, FileService fileService, NoteService noteService, CredentialService credentialService, EncryptionService encryptionService) {
+    public HomeController(UserService userService, FileService fileService, /*NoteService noteService, */CredentialService credentialService, EncryptionService encryptionService) {
         this.userService = userService;
         this.fileService = fileService;
-        this.noteService = noteService;
+        //this.noteService = noteService;
         this.credentialService = credentialService;
         this.encryptionService = encryptionService;
     }
@@ -37,18 +37,19 @@ public class HomeController {
                               @ModelAttribute("newNote") NoteForm newNote, @ModelAttribute("newCredential") CredentialForm newCredential,
                               Model model){
 
-
-
-        int userId = userService.getUserIdByAuthen(authentication);
+        Integer userId = userService.getUserIdByAuthen(authentication);
+        System.out.printf(String.valueOf(userId));
 
         if (userId == -1){
             return "login";
         }
 
-        List<Credentials> data = credentialService.getListCredential(userId);
-
+        String userName = userService.getUserName(authentication);
+        List<Credentials> data = credentialService.getCredentialListingsByName(userName);
         model.addAttribute("files", this.fileService.getFileListings(userId));
-        model.addAttribute("credentials", credentialService.getListCredential(userId));
+        //model.addAttribute("credentials", credentialService.getListCredential(userId));
+        model.addAttribute("credentials", credentialService.getCredentialListingsByName(userName));
+        model.addAttribute("encryptionService", encryptionService);
         return  "home";
     }
 
@@ -58,7 +59,7 @@ public class HomeController {
             @ModelAttribute("newNote") NoteForm newNote, @ModelAttribute("newCredential") CredentialForm newCredential, Model model) throws IOException {
         int userId = userService.getUserIdByAuthen(authentication);
         int checkUpdate = 0;
-        String[] fileListings = fileService.getFileListings(userId);
+        List<String> fileListings = fileService.getFileListings(userId);
         MultipartFile multipartFile = newFile.getFile();
         String fileName = multipartFile.getOriginalFilename();
         boolean fileIsDuplicate = false;

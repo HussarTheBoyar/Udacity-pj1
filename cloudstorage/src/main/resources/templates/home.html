@@ -164,8 +164,8 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="#" method="POST" th:action="@{/insertCredential}" th:object="${newCredential}">
-                                            <input type="hidden" name="credentialId" th:field="*{credentialId}" id="credential-id">
+                                        <form action="#" method="POST" th:action="@{credential/insertCredential}" th:object="${newCredential}">
+                                            <!--<input type="hidden" name="credentialId" th:field="*{credentialId}" id="credential-id">-->
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
                                                 <input type="text" name="url" th:field="*{url}" class="form-control" id="credential-url"
